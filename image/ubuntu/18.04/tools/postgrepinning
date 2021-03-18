@@ -1,0 +1,3 @@
+Package: postgrespro* libpq* libecpg* libpqtypes*
+Pin: origin *.postgrespro.ru
+Pin-Priority: 1001

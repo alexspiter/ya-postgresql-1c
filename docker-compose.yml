@@ -1,0 +1,56 @@
+version: "3.7"
+
+services:
+  master:
+    image: silverbulleters/ya-docker-postgresql-1c:12.2
+    tmpfs: 
+      - /var/lib/pgpro/1c-11/temptblspc
+    env_file:
+      ./.env
+    environment:
+      - USETMPFS_FOR_TMP=true
+      - DEBUG=false
+      - DB_NAME=powa,mamonsu
+      - POWA_DATABASE=powa
+      - PG_TUNE_BY_MAMONSU=true
+      - PG_MAX_CONNECTION=30
+      - PG_TIMEZONE=Europe/Moscow
+    ports: 
+     - 5432:5432
+  slave:
+    image: silverbulleters/ya-docker-postgresql-1c:12.2
+    env_file:
+      ./.env
+    environment:
+      - USETMPFS_FOR_TMP=false
+      - DEBUG=true
+      - DB_NAME=
+      - PG_TUNE_BY_MAMONSU=false
+      - PG_MAX_CONNECTION=10
+      - PG_TIMEZONE=Europe/Moscow
+      - REPLICATION_MODE=slave
+      - REPLICATION_HOST=master
+    depends_on:
+      - master
+    ports: 
+      - 15432:5432
+  pghero:
+    build:
+      context: ./tools/pghero
+    image: silverbulleters/pghero:latest
+    environment:
+      ENVIRON: prod
+    env_file:
+      .env
+    ports: 
+     - 10080:8080
+  powa:
+    build:
+      context: ./tools/powa
+    image: silverbulleters/powa-web:latest
+    ports: 
+     - 10088:8888
+  sqlpad:
+    image: sqlpad/sqlpad:latest
+    ports: 
+     - 10030:3000

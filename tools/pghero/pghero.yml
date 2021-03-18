@@ -1,0 +1,13 @@
+databases:
+  powa-on-master:
+    url: postgres://postgres:SuperPasssword!12@master:5432/powa
+  powa-on-slave:
+    url: postgres://postgres:SuperPasssword!12@slave:5432/powa
+
+long_running_query_sec: 60
+slow_query_ms: 20
+slow_query_calls: 100
+total_connections_threshold: 30
+explain_timeout_sec: 10
+
+time_zone: "Europe/Moscow"

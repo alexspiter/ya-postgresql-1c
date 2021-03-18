@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  backup:
+    image: silverbulleters/ya-docker-postgresql-1c:12.2
+    env_file:
+      ./.env
+    volumes:
+      - ./backups/postgresql.latest:/var/lib/pgpro/1c-12/data
+    environment:
+      - DEBUG=true
+      - REPLICATION_MODE=backup
+      - REPLICATION_SSLMODE=prefer
+      - REPLICATION_HOST=172.31.1.174
